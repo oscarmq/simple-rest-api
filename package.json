@@ -1,5 +1,5 @@
 {
-  "name": "ts-node-express-starter",
+  "name": "todos",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
