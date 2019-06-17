@@ -64,6 +64,19 @@ app.put('/api/todos/:id', (req, res) => {
     res.send(todo)
 })
 
+app.delete('/api/todos/:id', (req, res) => {
+    const todo = todos.find((t) => t.id === parseInt(req.params.id))
+
+    if (!todo) {
+        return res.status(404).send('There is no todo with the given ID')
+    }
+
+    const index = todos.indexOf(todo)
+    todos.splice(index, 1)
+
+    res.send(todo)
+})
+
 const port = process.env.PORT || 3000
 // tslint:disable-next-line:no-console
 app.listen(port, () => console.log(`Server started at http://localhost:${port}`))
