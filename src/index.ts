@@ -24,6 +24,15 @@ const validateTodo = (todo: ITodo) => {
 
 app.get('/api/todos', (req, res) => res.send(todos))
 
+app.get('/api/todos/:id', (req, res) => {
+    const todo = todos.find((t) => t.id === parseInt(req.params.id))
+
+    if (!todo) {
+        return res.status(404).send('There is no todo with the given ID')
+    }
+    res.send(todo)
+})
+
 app.post('/api/todos', (req, res) => {
     const { error } = validateTodo(req.body)
     if (error) {
