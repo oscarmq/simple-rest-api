@@ -1,5 +1,5 @@
 {
-  "name": "todos",
+  "name": "simple-rest-api-with-express",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
