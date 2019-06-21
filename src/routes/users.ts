@@ -1,5 +1,6 @@
 import express from 'express'
 import Joi from 'joi'
+import _ from 'lodash'
 import { User } from '../models/users'
 
 export const router = express.Router()
@@ -11,14 +12,10 @@ router.post('/', async (req, res) => {
     let user = await User.findOne({ email: req.body.email })
     if (user) return res.status(404).send('There is already an account with this email')
 
-    user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    })
+    user = new User(_.pick(req.body, ['name', 'email', 'password']))
     user = await user.save()
 
-    res.send(user)
+    res.send(_.pick(user, ['_id', 'name', 'email']))
 })
 
 const validateUser = (user: any) => {
