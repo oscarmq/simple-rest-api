@@ -1,7 +1,9 @@
+import bcrypt from 'bcrypt'
 import express from 'express'
 import Joi from 'joi'
 import _ from 'lodash'
 import { User } from '../models/users'
+
 
 export const router = express.Router()
 
@@ -13,9 +15,18 @@ router.post('/', async (req, res) => {
     if (user) return res.status(404).send('There is already an account with this email')
 
     user = new User(_.pick(req.body, ['name', 'email', 'password']))
-    user = await user.save()
+    user.toObject({ getters: true })
+    const salt = await bcrypt.genSalt()
+    const password = await bcrypt.hash(user.get('password'), salt)
 
-    res.send(_.pick(user, ['_id', 'name', 'email']))
+    user = new User({
+        name: user.get('name'),
+        email: user.get('email'),
+        password: password
+    })
+    await user.save()
+
+    res.send(_.pick(user, ['_id', 'name', 'email', 'password']))
 })
 
 const validateUser = (user: any) => {
